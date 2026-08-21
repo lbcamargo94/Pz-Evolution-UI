@@ -2,12 +2,14 @@
 -- Carregado primeiro pelo engine (nome alfabético + pasta client/)
 -- Ordem: Theme → Utils → BasePanel → BaseButton → painéis específicos
 
--- Namespace global
+-- Namespace global (EUI.log já foi criado por shared/EUI_Logger.lua)
 EUI = EUI or {}
 EUI.VERSION = "0.6.0"
 EUI.MOD_ID  = "PZEvolutionUI"
 
-print("[EUI] PZ Evolution UI " .. EUI.VERSION .. " inicializando…")
+-- EUI.log.setLevel("DEBUG")  ← descomente para habilitar logs de debug
+
+EUI.log.info("PZ Evolution UI " .. EUI.VERSION .. " inicializando…")
 
 -- Os arquivos em client/ são carregados automaticamente pelo engine na ordem
 -- alfabética da pasta. A hierarquia de nomes garante a ordem correta:
@@ -18,5 +20,5 @@ print("[EUI] PZ Evolution UI " .. EUI.VERSION .. " inicializando…")
 --   panels/EUI_*.lua
 
 Events.OnGameStart.Add(function()
-    print("[EUI] Mod carregado com sucesso — " .. EUI.VERSION)
+    EUI.log.info("mod carregado com sucesso — " .. EUI.VERSION)
 end)

@@ -15,23 +15,57 @@ local ICON_W   = 16
 
 -- Helpers seguros — evitam RuntimeException quando Java retorna null (→ nil Lua)
 -- Usa indexação por tabela (obj.method) para checar existência antes de chamar.
+
+-- Flag de diagnóstico: loga apenas na primeira chamada
+local _healthMethodLogged = false
+
 local function safeHealth(p)
     local bd = p:getBodyDamage()
-    if not bd then return 1 end
-    -- B42 renomeou/reestruturou BodyDamage; checa qual método existe
-    if bd.getOverallBodyHealth then return (bd:getOverallBodyHealth() or 100) / 100 end
-    if bd.getBodyHealth         then return (bd:getBodyHealth()         or 100) / 100 end
-    -- fallback: tenta getHealth() diretamente no player
+    if not bd then
+        EUI.log.warn("getBodyDamage() retornou nil", "HUD")
+        return 1
+    end
+    if bd.getOverallBodyHealth then
+        if not _healthMethodLogged then
+            EUI.log.debug("saúde via BodyDamage:getOverallBodyHealth()", "HUD")
+            _healthMethodLogged = true
+        end
+        return (bd:getOverallBodyHealth() or 100) / 100
+    end
+    if bd.getBodyHealth then
+        if not _healthMethodLogged then
+            EUI.log.debug("saúde via BodyDamage:getBodyHealth()", "HUD")
+            _healthMethodLogged = true
+        end
+        return (bd:getBodyHealth() or 100) / 100
+    end
     if p.getHealth then
+        if not _healthMethodLogged then
+            EUI.log.debug("saúde via IsoPlayer:getHealth()", "HUD")
+            _healthMethodLogged = true
+        end
         local v = p:getHealth()
         return type(v) == "number" and v or 1
     end
+    if not _healthMethodLogged then
+        EUI.log.error("nenhum método de saúde encontrado — BodyDamage e IsoPlayer sem API conhecida", "HUD")
+        _healthMethodLogged = true
+    end
     return 1
 end
+
 local function safeStat(p, method)
-    local st = p:getStats(); if not st then return 0 end
-    local v = st[method] and st[method](st) or 0
-    return v ~= nil and v or 0
+    local st = p:getStats()
+    if not st then
+        EUI.log.warn("getStats() retornou nil", "HUD")
+        return 0
+    end
+    local v = st[method] and st[method](st)
+    if v == nil then
+        EUI.log.debug("stat sem retorno: " .. method, "HUD")
+        return 0
+    end
+    return v
 end
 
 local STATS = {
