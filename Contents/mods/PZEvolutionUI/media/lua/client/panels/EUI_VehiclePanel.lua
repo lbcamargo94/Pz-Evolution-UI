@@ -322,9 +322,10 @@ local function openVehiclePanel(playerNum)
     EUI._vehiclePanel = p
 end
 
--- Abre ao entrar/sair de veículo (abre automaticamente ao sentar no carro)
+-- Abre ao entrar/sair de veículo (respeitando setting autoOpenVehicle)
 Events.OnEnterVehicle.Add(function(player)
     if player:getPlayerNum() ~= 0 then return end
+    if EUI.Settings and EUI.Settings.autoOpenVehicle == false then return end
     openVehiclePanel(0)
 end)
 

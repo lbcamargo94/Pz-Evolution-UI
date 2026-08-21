@@ -27,10 +27,22 @@ local STATS = {
     end },
 }
 
+function EUI_HUD:calcPosition(w, h)
+    local sw   = getCore():getScreenWidth()
+    local sh   = getCore():getScreenHeight()
+    local pos  = EUI.Settings and EUI.Settings.hudPosition or "bottomLeft"
+    local pad  = 12
+    if pos == "bottomRight" then return sw - w - pad, sh - h - 60
+    elseif pos == "topLeft"  then return pad, 60
+    elseif pos == "topRight" then return sw - w - pad, 60
+    else return pad, sh - h - 60 end  -- bottomLeft (padrão)
+end
+
 function EUI_HUD:new(playerNum)
     local rows = #STATS
     local h    = HUD_PAD * 2 + rows * (ROW_H + 4) - 4
-    local o    = ISPanel.new(self, HUD_PAD, getCore():getScreenHeight() - h - 60, HUD_W, h)
+    local px, py = EUI_HUD.calcPosition(nil, HUD_W, h)
+    local o    = ISPanel.new(self, px, py, HUD_W, h)
     o.playerNum = playerNum or 0
     o.moveWithMouse = false
     return o
@@ -41,8 +53,9 @@ function EUI_HUD:initialise()
 end
 
 function EUI_HUD:prerender()
-    local bg = T.BG
-    self:drawRect(0, 0, self.width, self.height, bg.a * 0.92, bg.r, bg.g, bg.b)
+    local bg  = T.BG
+    local opa = EUI.Settings and EUI.Settings.hudOpacity or 0.9
+    self:drawRect(0, 0, self.width, self.height, bg.a * opa, bg.r, bg.g, bg.b)
     local brd = T.Border
     self:drawRectBorder(0, 0, self.width, self.height, brd.a, brd.r, brd.g, brd.b)
 end
@@ -83,6 +96,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnGameStart.Add(function()
+    if EUI.Settings and EUI.Settings.hudEnabled == false then return end
     local hud = EUI_HUD:new(0)
     hud:initialise()
     hud:instantiate()

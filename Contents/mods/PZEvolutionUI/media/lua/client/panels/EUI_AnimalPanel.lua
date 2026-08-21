@@ -97,8 +97,7 @@ function EUI_AnimalPanel:scanAnimals()
     local sq = player:getSquare()
     if not sq then return end
 
-    -- Raio de busca: 12 tiles
-    local radius = 12
+    local radius = (EUI.Settings and EUI.Settings.animalRadius) or 12
     for dx = -radius, radius do
         for dy = -radius, radius do
             local s = getCell():getGridSquare(sq:getX() + dx, sq:getY() + dy, sq:getZ())

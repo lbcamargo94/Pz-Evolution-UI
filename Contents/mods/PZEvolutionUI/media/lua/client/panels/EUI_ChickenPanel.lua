@@ -58,8 +58,9 @@ function EUI_ChickenPanel:scanChickens()
     local sq = player:getSquare()
     if not sq then return end
 
-    for dx = -16, 16 do
-        for dy = -16, 16 do
+    local radius = (EUI.Settings and EUI.Settings.chickenRadius) or 16
+    for dx = -radius, radius do
+        for dy = -radius, radius do
             local s = getCell():getGridSquare(sq:getX() + dx, sq:getY() + dy, sq:getZ())
             if s then
                 local objs = s:getObjects()

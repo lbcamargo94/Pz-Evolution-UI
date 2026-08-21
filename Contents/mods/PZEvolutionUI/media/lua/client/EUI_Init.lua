@@ -4,7 +4,7 @@
 
 -- Namespace global
 EUI = EUI or {}
-EUI.VERSION = "0.1.0"
+EUI.VERSION = "0.6.0"
 EUI.MOD_ID  = "PZEvolutionUI"
 
 print("[EUI] PZ Evolution UI " .. EUI.VERSION .. " inicializando…")
