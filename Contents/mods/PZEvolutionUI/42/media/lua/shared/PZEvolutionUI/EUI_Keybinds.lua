@@ -24,16 +24,20 @@ local KEY_DEFS = {
     { id="EUI_Settings",default=Keyboard.KEY_F11 },
 }
 
+-- Registra defaults; Keymap pode ser nil em B42 (RuntimeException escapa de pcall no Kahlua)
 for _, kd in ipairs(KEY_DEFS) do
     EUI.Keys[kd.id] = kd.default
-    pcall(function() Keymap.addKey(CAT, kd.id, kd.default) end)
+    if Keymap ~= nil then
+        pcall(function() Keymap.addKey(CAT, kd.id, kd.default) end)
+    end
 end
 
 -- Retorna o keycode atual do bind (respeita remapeamento do jogador)
 function EUI.getKey(id)
     local key = 0
-    pcall(function() key = Keymap.getKey(CAT, id) end)
-    -- Fallback: usa o default registrado
+    if Keymap ~= nil then
+        pcall(function() key = Keymap.getKey(CAT, id) end)
+    end
     if not key or key == 0 then key = EUI.Keys[id] or 0 end
     return key
 end
