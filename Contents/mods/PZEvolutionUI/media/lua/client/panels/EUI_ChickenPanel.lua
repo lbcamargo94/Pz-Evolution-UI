@@ -269,7 +269,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Chicken") then
+    if key == EUI.getKey("Chicken") then
         if EUI._chickenPanel then
             EUI._chickenPanel:setVisible(not EUI._chickenPanel:isVisible())
             if EUI._chickenPanel:isVisible() then EUI._chickenPanel:scanChickens() end

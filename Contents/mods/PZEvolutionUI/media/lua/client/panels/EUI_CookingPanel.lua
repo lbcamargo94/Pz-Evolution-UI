@@ -97,11 +97,13 @@ function EUI_CookingPanel:loadRecipes()
     self._recipes = {}
     local loaded = false
 
-    -- Tenta carregar do CraftRecipeManager (B42)
-    local ok, mgr = pcall(function() return CraftRecipeManager end)
-    if ok and mgr then
+    -- B42: CraftRecipeManager.getInstance()
+    local mgr = nil
+    pcall(function() mgr = CraftRecipeManager.getInstance() end)
+    if not mgr then pcall(function() mgr = CraftRecipeManager.instance() end) end
+    if mgr then
         local allRec = nil
-        pcall(function() allRec = mgr:getRecipes() end)
+        pcall(function() allRec = mgr:getRecipes and mgr:getRecipes() end)
         if allRec then
             for i = 0, allRec:size() - 1 do
                 local rec = allRec:get(i)
@@ -417,7 +419,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Cooking") then
+    if key == EUI.getKey("Cooking") then
         if EUI._cookingPanel then
             EUI._cookingPanel:setVisible(not EUI._cookingPanel:isVisible())
             if EUI._cookingPanel:isVisible() then EUI._cookingPanel:loadRecipes() end

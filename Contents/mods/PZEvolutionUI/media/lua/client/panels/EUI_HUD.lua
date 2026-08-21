@@ -27,7 +27,7 @@ local STATS = {
     end },
 }
 
-function EUI_HUD:calcPosition(w, h)
+local function calcHUDPosition(w, h)
     local sw   = getCore():getScreenWidth()
     local sh   = getCore():getScreenHeight()
     local pos  = EUI.Settings and EUI.Settings.hudPosition or "bottomLeft"
@@ -41,7 +41,7 @@ end
 function EUI_HUD:new(playerNum)
     local rows = #STATS
     local h    = HUD_PAD * 2 + rows * (ROW_H + 4) - 4
-    local px, py = EUI_HUD.calcPosition(nil, HUD_W, h)
+    local px, py = calcHUDPosition(HUD_W, h)
     local o    = ISPanel.new(self, px, py, HUD_W, h)
     o.playerNum = playerNum or 0
     o.moveWithMouse = false

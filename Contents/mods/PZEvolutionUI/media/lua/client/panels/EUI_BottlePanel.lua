@@ -88,19 +88,17 @@ function EUI_BottlePanel:scanBottles()
             for _, t in ipairs(BOTTLE_TYPES) do
                 if itype == t or ("Base." .. itype) == t then isBottle = true; break end
             end
-            -- Também aceita qualquer item drainable com capacidade > 0
-            if not isBottle then
-                pcall(function() isBottle = item:isDrainable() end)
-            end
+            -- Também aceita qualquer item com FluidContainer (B42) ou drainable (B41)
+            if not isBottle then isBottle = U.isFluidItem(item) end
             if isBottle then
                 local name    = "?"; local cur = 0; local cap = 1
                 local liq     = "Vazio"; local boiled = false; local tainted = false
-                pcall(function() name    = item:getName()          or "?"     end)
-                pcall(function() cur     = item:getCurrentLiquid() or 0       end)
-                pcall(function() cap     = item:getCapacity()      or 1       end)
-                pcall(function() liq     = item:getFluidName()     or "Vazio" end)
-                pcall(function() boiled  = item:isBoiledWater and item:isBoiledWater()   end)
-                pcall(function() tainted = item:isTaintedWater and item:isTaintedWater() end)
+                pcall(function() name = item:getName() or "?" end)
+                cur     = U.getFluidAmount(item)
+                cap     = U.getFluidCapacity(item)
+                liq     = U.getFluidName(item)
+                boiled  = U.isBoiledWater(item)
+                tainted = U.isTaintedWater(item)
                 table.insert(self._bottles, {
                     item    = item,
                     name    = name,
@@ -320,7 +318,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Bottle") then
+    if key == EUI.getKey("Bottle") then
         if EUI._bottlePanel then
             EUI._bottlePanel:setVisible(not EUI._bottlePanel:isVisible())
             if EUI._bottlePanel:isVisible() then EUI._bottlePanel:scanBottles() end

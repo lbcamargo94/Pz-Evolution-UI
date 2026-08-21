@@ -430,7 +430,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("EUI_Settings") then
+    if key == EUI.getKey("EUI_Settings") then
         if EUI._settingsPanel then
             EUI._settingsPanel:setVisible(not EUI._settingsPanel:isVisible())
             if EUI._settingsPanel:isVisible() then

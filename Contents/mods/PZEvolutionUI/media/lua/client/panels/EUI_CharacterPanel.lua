@@ -190,7 +190,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Health") then
+    if key == EUI.getKey("Health") then
         if EUI._characterPanel and EUI._characterPanel:isVisible() then
             EUI._characterPanel:setVisible(false)
             return

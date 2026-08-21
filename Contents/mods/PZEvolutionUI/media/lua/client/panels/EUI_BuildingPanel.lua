@@ -419,7 +419,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Build") then
+    if key == EUI.getKey("Build") then
         if EUI._buildingPanel then
             EUI._buildingPanel:setVisible(not EUI._buildingPanel:isVisible())
             if EUI._buildingPanel:isVisible() then EUI._buildingPanel:loadBuildRecipes() end

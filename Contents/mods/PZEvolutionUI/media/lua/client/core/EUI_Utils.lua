@@ -104,3 +104,87 @@ end
 
 function EUI.Utils.clamp(v, lo, hi) return math.max(lo, math.min(hi, v)) end
 function EUI.Utils.lerp(a, b, t)    return a + (b - a) * t              end
+
+-- ── B42 Fluid API ─────────────────────────────────────────────────────────────
+-- B42 moveu os dados de fluido para um objeto FluidContainer separado.
+-- Estas funções abstraem a diferença entre B41 e B42.
+
+function EUI.Utils.getFluidContainer(item)
+    local fc = nil
+    pcall(function() fc = item:getFluidContainer() end)
+    return fc
+end
+
+function EUI.Utils.isFluidItem(item)
+    if EUI.Utils.getFluidContainer(item) then return true end
+    local ok, v = pcall(function() return item:isDrainable() end)
+    return ok and v == true
+end
+
+function EUI.Utils.getFluidAmount(item)
+    local fc = EUI.Utils.getFluidContainer(item)
+    if fc then
+        local v = 0
+        pcall(function() v = fc:getAmount() or 0 end)
+        return v
+    end
+    local ok, v = pcall(function() return item:getCurrentLiquid() end)
+    return (ok and v) or 0
+end
+
+function EUI.Utils.getFluidCapacity(item)
+    local fc = EUI.Utils.getFluidContainer(item)
+    if fc then
+        local v = 1
+        pcall(function() v = fc:getCapacity() or 1 end)
+        return v
+    end
+    local ok, v = pcall(function() return item:getCapacity() end)
+    return (ok and v) or 1
+end
+
+function EUI.Utils.getFluidName(item)
+    local fc = EUI.Utils.getFluidContainer(item)
+    if fc then
+        local name = "Vazio"
+        pcall(function()
+            local ft = fc:getFluidType()
+            if ft then name = ft:getName() or "Vazio" end
+        end)
+        return name
+    end
+    local ok, v = pcall(function() return item:getFluidName() end)
+    return (ok and v) or "Vazio"
+end
+
+function EUI.Utils.isBoiledWater(item)
+    local fc = EUI.Utils.getFluidContainer(item)
+    if fc then
+        local v = false
+        pcall(function() v = fc:isBoiled and fc:isBoiled() end)
+        return v == true
+    end
+    local ok, v = pcall(function() return item:isBoiledWater() end)
+    return ok and v == true
+end
+
+function EUI.Utils.isTaintedWater(item)
+    local fc = EUI.Utils.getFluidContainer(item)
+    if fc then
+        local v = false
+        pcall(function() v = fc:isTainted and fc:isTainted() end)
+        return v == true
+    end
+    local ok, v = pcall(function() return item:isTaintedWater() end)
+    return ok and v == true
+end
+
+-- ── B42 Input ────────────────────────────────────────────────────────────────
+
+function EUI.Utils.isShiftDown()
+    local ok, v = pcall(function()
+        return getKeyboard():isKeyDown(Keyboard.KEY_LSHIFT)
+            or getKeyboard():isKeyDown(Keyboard.KEY_RSHIFT)
+    end)
+    return ok and v == true
+end

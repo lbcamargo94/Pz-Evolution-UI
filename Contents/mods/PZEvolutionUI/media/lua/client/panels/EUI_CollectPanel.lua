@@ -109,7 +109,9 @@ function EUI_CollectPanel:refreshInventory()
 
     -- Nível de forrageamento
     pcall(function()
-        local pk = PerkFactory.getPerkFromString("Foraging")
+        -- B42: "Foraging" foi renomeado para "PlantScavenging"
+        local pk = PerkFactory.getPerkFromString("PlantScavenging")
+                or PerkFactory.getPerkFromString("Foraging")
         if pk then self._foragingLvl = player:getPerkLevel(pk) end
     end)
 
@@ -294,7 +296,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Collect") then
+    if key == EUI.getKey("Collect") then
         if EUI._collectPanel then
             EUI._collectPanel:setVisible(not EUI._collectPanel:isVisible())
             if EUI._collectPanel:isVisible() then EUI._collectPanel:refreshInventory() end

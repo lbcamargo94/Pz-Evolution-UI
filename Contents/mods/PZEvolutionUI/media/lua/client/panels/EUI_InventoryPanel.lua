@@ -381,7 +381,7 @@ end
 Events.OnKeyPressed.Add(function(key)
     -- Key 18 = 'I' (inventário) por padrão no PZ
     -- Verifica o bind real do jogo
-    if key == getCore():getKey("Inventory") then
+    if key == EUI.getKey("Inventory") then
         -- Cancela o vanilla e abre o EUI
         -- (O hook correto depende da versão B42; ajustar se necessário)
         onOpenInventory(0)

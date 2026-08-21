@@ -186,7 +186,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Generator") then
+    if key == EUI.getKey("Generator") then
         if EUI._generatorPanel then
             EUI._generatorPanel:setVisible(not EUI._generatorPanel:isVisible())
             return

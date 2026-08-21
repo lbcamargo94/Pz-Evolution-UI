@@ -80,13 +80,15 @@ function EUI_CraftingPanel:loadRecipes()
 
     local catSet = {}
 
-    -- B42: CraftRecipeManager contém todas as receitas
-    local ok, mgr = pcall(function() return CraftRecipeManager.instance() end)
+    -- B42: CraftRecipeManager.getInstance() (não .instance())
+    local ok, mgr = pcall(function() return CraftRecipeManager.getInstance() end)
     if not ok or not mgr then
-        -- Fallback: tenta via getRecipes() global
-        ok, mgr = pcall(function() return getRecipes() end)
-        if not ok then return end
+        ok, mgr = pcall(function() return CraftRecipeManager.instance() end)  -- B41 fallback
     end
+    if not ok or not mgr then
+        pcall(function() mgr = getRecipes() end)
+    end
+    if not mgr then return end
 
     local recipeList
     pcall(function()
@@ -422,7 +424,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Crafting") then
+    if key == EUI.getKey("Crafting") then
         if EUI._craftingPanel then
             EUI._craftingPanel:setVisible(not EUI._craftingPanel:isVisible())
             if EUI._craftingPanel:isVisible() then

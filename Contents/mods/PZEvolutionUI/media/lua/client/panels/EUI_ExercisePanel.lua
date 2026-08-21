@@ -17,7 +17,7 @@ local EXERCISES = {
     { id="StrengthExercise",   label="Flexão",          perk="Strength",   icon="💪", sets=3, reps=10 },
     { id="FitnessExercise",    label="Polichinelo",     perk="Fitness",    icon="🤸", sets=3, reps=20 },
     { id="SprinterExercise",   label="Corrida",         perk="Sprinting",  icon="🏃", sets=1, reps=60 },
-    { id="LightFootExercise",  label="Agachamento",     perk="Lightfooted",icon="🦵", sets=3, reps=15 },
+    { id="LightFootExercise",  label="Agachamento",     perk="Lightfoot",  icon="🦵", sets=3, reps=15 },
     { id="NimbleExercise",     label="Prancha",         perk="Nimble",     icon="🧘", sets=1, reps=30 },
     { id="AimingExercise",     label="Mira (treino)",   perk="Aiming",     icon="🎯", sets=2, reps=10 },
     { id="ReloadExercise",     label="Recarga (treino)",perk="Reloading",  icon="🔫", sets=2, reps=10 },
@@ -252,7 +252,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Exercise") then
+    if key == EUI.getKey("Exercise") then
         if EUI._exercisePanel then
             EUI._exercisePanel:setVisible(not EUI._exercisePanel:isVisible())
             return

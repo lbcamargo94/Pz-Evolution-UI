@@ -1,29 +1,38 @@
 -- EUI_Keybinds.lua — registra keybinds do mod no sistema do PZ (B42)
 -- Arquivo em shared/ para que os binds apareçam na tela de controles do jogo
 
-if not getCore then return end
+EUI = EUI or {}
+EUI.Keys = {}  -- mapa id → keycode padrão (para fallback)
 
-local function addKey(id, defaultKey)
-    -- B42: Keymap.addKey(category, action, key)
-    pcall(function()
-        Keymap.addKey("PZ Evolution UI", id, defaultKey)
-    end)
+local CAT = "PZ Evolution UI"
+
+local KEY_DEFS = {
+    { id="Inventory",   default=Keyboard.KEY_I   },
+    { id="Character",   default=Keyboard.KEY_C   },
+    { id="Crafting",    default=Keyboard.KEY_B   },
+    { id="Vehicle",     default=Keyboard.KEY_V   },
+    { id="Generator",   default=Keyboard.KEY_G   },
+    { id="Build",       default=Keyboard.KEY_F   },
+    { id="Animals",     default=Keyboard.KEY_N   },
+    { id="Cooking",     default=Keyboard.KEY_K   },
+    { id="Exercise",    default=Keyboard.KEY_X   },
+    { id="Liquid",      default=Keyboard.KEY_L   },
+    { id="Chicken",     default=Keyboard.KEY_H   },
+    { id="Collect",     default=Keyboard.KEY_O   },
+    { id="Bottle",      default=Keyboard.KEY_U   },
+    { id="EUI_Settings",default=Keyboard.KEY_F11 },
+}
+
+for _, kd in ipairs(KEY_DEFS) do
+    EUI.Keys[kd.id] = kd.default
+    pcall(function() Keymap.addKey(CAT, kd.id, kd.default) end)
 end
 
--- Painéis (teclas padrão — jogador pode remapear nas opções do jogo)
-addKey("Inventory",  Keyboard.KEY_I)
-addKey("Character",  Keyboard.KEY_C)
-addKey("Crafting",   Keyboard.KEY_B)
-addKey("Vehicle",    Keyboard.KEY_V)
-addKey("Generator",  Keyboard.KEY_G)
-addKey("Build",      Keyboard.KEY_F)
-addKey("Animals",    Keyboard.KEY_N)
-addKey("Cooking",    Keyboard.KEY_K)
-addKey("Exercise",   Keyboard.KEY_X)
-addKey("Liquid",     Keyboard.KEY_L)
-addKey("Chicken",    Keyboard.KEY_H)
-addKey("Collect",    Keyboard.KEY_O)
-addKey("Bottle",     Keyboard.KEY_W)
-
--- Configurações
-addKey("EUI_Settings", Keyboard.KEY_F11)
+-- Retorna o keycode atual do bind (respeita remapeamento do jogador)
+function EUI.getKey(id)
+    local key = 0
+    pcall(function() key = Keymap.getKey(CAT, id) end)
+    -- Fallback: usa o default registrado
+    if not key or key == 0 then key = EUI.Keys[id] or 0 end
+    return key
+end

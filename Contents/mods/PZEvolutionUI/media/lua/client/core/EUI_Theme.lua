@@ -47,7 +47,7 @@ EUI.Theme = {
     FontSm     = UIFont.Small,
     Font       = UIFont.Medium,
     FontLg     = UIFont.Large,
-    FontTitle  = UIFont.Title,
+    FontTitle  = UIFont.Large,   -- B42: UIFont.Title foi removido
 }
 
 -- Atalhos rápidos para as cores mais usadas

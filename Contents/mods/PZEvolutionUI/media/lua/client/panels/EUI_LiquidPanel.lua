@@ -84,14 +84,12 @@ function EUI_LiquidPanel:scanContainers()
     for i = 0, items:size() - 1 do
         local item = items:get(i)
         if item then
-            local isDrainable = false
-            pcall(function() isDrainable = item:isDrainable() end)
-            if isDrainable then
-                local name = "?"; local liqName = "Vazio"; local cur = 0; local cap = 0
-                pcall(function() name    = item:getName()            or "?"    end)
-                pcall(function() liqName = item:getFluidName()       or "Vazio"end)
-                pcall(function() cur     = item:getCurrentLiquid()   or 0      end)
-                pcall(function() cap     = item:getCapacity()        or 1      end)
+            if U.isFluidItem(item) then
+                local name = "?"; local liqName = "Vazio"; local cur = 0; local cap = 1
+                pcall(function() name = item:getName() or "?" end)
+                liqName = U.getFluidName(item)
+                cur     = U.getFluidAmount(item)
+                cap     = U.getFluidCapacity(item)
                 table.insert(self._containers, {
                     item    = item,
                     name    = name,
@@ -164,9 +162,9 @@ function EUI_LiquidPanel:render()
     local from = self._selFrom; local to = self._selTo
     local hint = ""
     if not from and not to then
-        hint = "Clique = Origem   Ctrl+Click = Destino"
+        hint = "Clique = Origem   Shift+Click = Destino"
     elseif from and not to then
-        hint = "Origem: " .. from.name .. "  |  Ctrl+Click = Destino"
+        hint = "Origem: " .. from.name .. "  |  Shift+Click = Destino"
     elseif from and to then
         hint = from.name .. "  →  " .. to.name
     end
@@ -278,8 +276,8 @@ function EUI_LiquidPanel:onMouseDown(mx, my)
         local idx = math.floor(rel / (ROW_H + T.PadSm)) + 1
         local c   = self._containers[idx]
         if c then
-            -- Ctrl = destino, click normal = origem
-            if isKeyDown(16) then  -- Shift como Ctrl substituto (Lua PZ)
+            -- Shift = destino, click normal = origem
+            if U.isShiftDown() then
                 self._selTo = c
             else
                 self._selFrom = c
@@ -297,7 +295,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Liquid") then
+    if key == EUI.getKey("Liquid") then
         if EUI._liquidPanel then
             EUI._liquidPanel:setVisible(not EUI._liquidPanel:isVisible())
             if EUI._liquidPanel:isVisible() then EUI._liquidPanel:scanContainers() end

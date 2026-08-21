@@ -421,7 +421,7 @@ end
 -- ── Registro ──────────────────────────────────────────────────────────────────
 
 Events.OnKeyPressed.Add(function(key)
-    if key == getCore():getKey("Animals") then
+    if key == EUI.getKey("Animals") then
         if EUI._animalPanel then
             EUI._animalPanel:setVisible(not EUI._animalPanel:isVisible())
             if EUI._animalPanel:isVisible() then EUI._animalPanel:scanAnimals() end
