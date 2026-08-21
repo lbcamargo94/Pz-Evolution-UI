@@ -323,8 +323,8 @@ function EUI_AnimalPanel:drawAnimalInfo(cx, cy, cw, ch)
     local status = "Normal"
     pcall(function()
         if a.isPregnant and a:isPregnant() then status = "Prenha" end
-        if a:isSick     and a:isSick()     then status = "Doente" end
-        if a:isDead     and a:isDead()     then status = "Morto"  end
+        if a.isSick     and a:isSick()     then status = "Doente" end
+        if a.isDead     and a:isDead()     then status = "Morto"  end
     end)
     local sc = status == "Normal" and T.TextGreen or (status == "Morto" and T.TextRed or T.TextYellow)
     self:drawText("Estado: " .. status, cx + T.Pad, y, sc.r, sc.g, sc.b, sc.a, sm)
