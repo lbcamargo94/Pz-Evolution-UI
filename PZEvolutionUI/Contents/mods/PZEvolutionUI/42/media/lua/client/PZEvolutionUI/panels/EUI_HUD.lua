@@ -13,18 +13,25 @@ local BAR_H    = 6
 local ROW_H    = 18
 local ICON_W   = 16
 
--- Stats exibidos no HUD com suas respectivas cores e fontes de dado
+-- Helpers seguros — evitam RuntimeException quando Java retorna null (→ nil Lua)
+local function safeHealth(p)
+    local bd = p:getBodyDamage(); if not bd then return 1 end
+    return (bd:getOverallBodyHealth() or 100) / 100
+end
+local function safeStat(p, method)
+    local st = p:getStats(); if not st then return 0 end
+    local v = st[method] and st[method](st) or 0
+    return v ~= nil and v or 0
+end
+
 local STATS = {
-    { key="health",    label="Vida",      icon="❤",  color=T.Red,    get=function(p) return p:getBodyDamage():getOverallBodyHealth() / 100 end },
-    { key="hunger",    label="Fome",      icon="🍗",  color=T.Yellow, get=function(p) return 1 - (p:getStats():getHunger() or 0)           end },
-    { key="thirst",    label="Sede",      icon="💧",  color=T.Blue,   get=function(p) return 1 - (p:getStats():getThirst() or 0)           end },
-    { key="fatigue",   label="Cansaço",   icon="😴",  color=T.TextDim,get=function(p) return 1 - (p:getStats():getFatigue() or 0)          end },
-    { key="stress",    label="Estresse",  icon="😰",  color=T.Yellow, get=function(p) return 1 - (p:getStats():getStress() or 0)           end },
-    { key="boredom",   label="Tédio",     icon="😐",  color=T.TextOff,get=function(p) return 1 - (p:getStats():getBoredom() or 0)          end },
-    { key="morale",    label="Humor",     icon="🙂",  color=T.Green,  get=function(p)
-        local ok, v = pcall(function() return p:getStats():getMorale() end)
-        return ok and v or 0.5
-    end },
+    { key="health",  label="Vida",     icon="❤",  color=T.Red,     get=function(p) return safeHealth(p)                      end },
+    { key="hunger",  label="Fome",     icon="🍗",  color=T.Yellow,  get=function(p) return 1 - safeStat(p, "getHunger")       end },
+    { key="thirst",  label="Sede",     icon="💧",  color=T.Blue,    get=function(p) return 1 - safeStat(p, "getThirst")       end },
+    { key="fatigue", label="Cansaço",  icon="😴",  color=T.TextDim, get=function(p) return 1 - safeStat(p, "getFatigue")      end },
+    { key="stress",  label="Estresse", icon="😰",  color=T.Yellow,  get=function(p) return 1 - safeStat(p, "getStress")       end },
+    { key="boredom", label="Tédio",    icon="😐",  color=T.TextOff, get=function(p) return 1 - safeStat(p, "getBoredom")      end },
+    { key="morale",  label="Humor",    icon="🙂",  color=T.Green,   get=function(p) return safeStat(p, "getMorale") or 0.5    end },
 }
 
 local function calcHUDPosition(w, h)
