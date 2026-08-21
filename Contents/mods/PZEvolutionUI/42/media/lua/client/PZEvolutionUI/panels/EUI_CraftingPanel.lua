@@ -92,7 +92,7 @@ function EUI_CraftingPanel:loadRecipes()
 
     local recipeList
     pcall(function()
-        recipeList = mgr:getRecipes and mgr:getRecipes() or mgr
+        recipeList = mgr.getRecipes and mgr:getRecipes() or mgr
     end)
     if not recipeList then return end
 
@@ -165,7 +165,7 @@ function EUI_CraftingPanel:onCraft()
     if not player then return end
     pcall(function()
         local rec = self._selRecipe.rec
-        if rec and rec:isAvailable and rec:isAvailable(player) then
+        if rec and rec.isAvailable and rec:isAvailable(player) then
             ISTimedActionQueue.add(ISCraftAction:new(player, rec, 1))
         end
     end)

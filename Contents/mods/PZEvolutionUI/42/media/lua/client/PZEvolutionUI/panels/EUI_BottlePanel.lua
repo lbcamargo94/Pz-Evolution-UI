@@ -127,7 +127,7 @@ function EUI_BottlePanel:scanBottles()
                             if obj then
                                 local isWater = false
                                 pcall(function()
-                                    isWater = obj:hasWater and obj:hasWater()
+                                    isWater = obj.hasWater and obj:hasWater()
                                 end)
                                 if isWater then self._nearbyWater = true end
                             end

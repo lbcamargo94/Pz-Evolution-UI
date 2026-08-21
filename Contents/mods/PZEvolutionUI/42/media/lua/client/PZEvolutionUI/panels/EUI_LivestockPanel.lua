@@ -125,15 +125,15 @@ function EUI_LivestockPanel:scanTroughs()
                                     local cur, cap, isWater = 0, 100, false
                                     pcall(function()
                                         -- B42: cochos usam FluidContainer ou campos próprios
-                                        local fc = obj:getFluidContainer and obj:getFluidContainer()
+                                        local fc = obj.getFluidContainer and obj:getFluidContainer()
                                         if fc then
                                             cur    = fc:getAmount()
                                             cap    = fc:getCapacity()
                                             local ft = fc:getFluidType()
                                             if ft then isWater = ft:getName():find("[Ww]ater") ~= nil end
                                         else
-                                            cur = obj:getCurrentCapacity and obj:getCurrentCapacity() or 0
-                                            cap = obj:getCapacity and obj:getCapacity() or 100
+                                            cur = obj.getCurrentCapacity and obj:getCurrentCapacity() or 0
+                                            cap = obj.getCapacity and obj:getCapacity() or 100
                                         end
                                     end)
                                     local isWaterTrough = objName:find("[Ww]ater") ~= nil or isWater
@@ -178,7 +178,7 @@ function EUI_LivestockPanel:scanAnimals()
                         local obj = objs:get(i)
                         if obj then
                             local ok = false
-                            pcall(function() ok = obj:isAnimal and obj:isAnimal() end)
+                            pcall(function() ok = obj.isAnimal and obj:isAnimal() end)
                             if ok then table.insert(self._animals, obj) end
                         end
                     end

@@ -109,7 +109,7 @@ function EUI_AnimalPanel:scanAnimals()
                         if obj then
                             local isAnimal = false
                             pcall(function()
-                                isAnimal = obj:isAnimal and obj:isAnimal()
+                                isAnimal = obj.isAnimal and obj:isAnimal()
                             end)
                             if isAnimal then
                                 table.insert(self._animals, obj)
@@ -322,7 +322,7 @@ function EUI_AnimalPanel:drawAnimalInfo(cx, cy, cw, ch)
     -- Status textual
     local status = "Normal"
     pcall(function()
-        if a:isPregnant and a:isPregnant() then status = "Prenha" end
+        if a.isPregnant and a:isPregnant() then status = "Prenha" end
         if a:isSick     and a:isSick()     then status = "Doente" end
         if a:isDead     and a:isDead()     then status = "Morto"  end
     end)

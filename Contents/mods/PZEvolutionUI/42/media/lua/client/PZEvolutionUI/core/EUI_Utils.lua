@@ -161,7 +161,7 @@ function EUI.Utils.isBoiledWater(item)
     local fc = EUI.Utils.getFluidContainer(item)
     if fc then
         local v = false
-        pcall(function() v = fc:isBoiled and fc:isBoiled() end)
+        pcall(function() v = fc.isBoiled and fc:isBoiled() end)
         return v == true
     end
     local ok, v = pcall(function() return item:isBoiledWater() end)
@@ -172,7 +172,7 @@ function EUI.Utils.isTaintedWater(item)
     local fc = EUI.Utils.getFluidContainer(item)
     if fc then
         local v = false
-        pcall(function() v = fc:isTainted and fc:isTainted() end)
+        pcall(function() v = fc.isTainted and fc:isTainted() end)
         return v == true
     end
     local ok, v = pcall(function() return item:isTaintedWater() end)

@@ -70,7 +70,7 @@ function EUI_ChickenPanel:scanChickens()
                         if obj then
                             local isChicken = false
                             pcall(function()
-                                local t = obj:getAnimalType and obj:getAnimalType() or ""
+                                local t = obj.getAnimalType and obj:getAnimalType() or ""
                                 isChicken = t:find("Chicken") ~= nil or t:find("Hen") ~= nil
                             end)
                             if isChicken then
@@ -81,7 +81,7 @@ function EUI_ChickenPanel:scanChickens()
                                 pcall(function() hpMax    = obj:getMaxHealth()   or 100       end)
                                 pcall(function() hunger   = obj:getHunger()      or 0         end)
                                 pcall(function() stress   = obj:getStress()      or 0         end)
-                                pcall(function() eggReady = obj:hasEgg and obj:hasEgg()       end)
+                                pcall(function() eggReady = obj.hasEgg and obj:hasEgg()       end)
                                 if eggReady then self._eggs = self._eggs + 1 end
                                 table.insert(self._chickens, {
                                     obj      = obj,

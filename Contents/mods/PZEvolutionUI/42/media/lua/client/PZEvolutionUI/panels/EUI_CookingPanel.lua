@@ -103,7 +103,7 @@ function EUI_CookingPanel:loadRecipes()
     if not mgr then pcall(function() mgr = CraftRecipeManager.instance() end) end
     if mgr then
         local allRec = nil
-        pcall(function() allRec = mgr:getRecipes and mgr:getRecipes() end)
+        pcall(function() allRec = mgr.getRecipes and mgr:getRecipes() end)
         if allRec then
             for i = 0, allRec:size() - 1 do
                 local rec = allRec:get(i)
@@ -341,7 +341,7 @@ function EUI_CookingPanel:drawDetail(cx, cy, cw, ch)
     local ings   = {}
     if r.rec then
         pcall(function()
-            local il = r.rec:getIngredients and r.rec:getIngredients()
+            local il = r.rec.getIngredients and r.rec:getIngredients()
             if il then
                 for i = 0, il:size() - 1 do
                     local ing = il:get(i)

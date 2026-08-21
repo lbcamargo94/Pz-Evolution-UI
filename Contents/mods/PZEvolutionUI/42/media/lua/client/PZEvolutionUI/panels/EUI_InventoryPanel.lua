@@ -147,7 +147,7 @@ function EUI_InventoryList:doDrawItem(y, item, alt)
 
     -- Ícone
     local iconSz = T.RowH - 4
-    local tex    = it:getTex and it:getTex()
+    local tex    = it.getTex and it:getTex()
     if tex then self:drawTextureScaled(tex, x, y + 2, iconSz, iconSz, 1, 1, 1, 1) end
     x = x + iconSz + T.PadSm
 
@@ -159,7 +159,7 @@ function EUI_InventoryList:doDrawItem(y, item, alt)
     self:drawText(name, x, ty, rarColor.r, rarColor.g, rarColor.b, rarColor.a, font)
 
     -- Peso
-    local wStr = U.fmtWeight(it:getWeight and it:getWeight() or 0) .. " kg"
+    local wStr = U.fmtWeight(it.getWeight and it:getWeight() or 0) .. " kg"
     local ww   = getTextManager():MeasureStringX(font, wStr)
     local dim  = T.TextDim
     self:drawText(wStr, self.width - ww - T.ScrollW - T.PadSm, ty, dim.r, dim.g, dim.b, dim.a, font)
@@ -319,17 +319,17 @@ function EUI_InventoryPage:refreshInventories()
     self._listPlayer:populateFromInventory(inv)
 
     -- Peso
-    local curW = inv:getCapacityWeight and inv:getCapacityWeight() or 0
-    local maxW = player:getMaxWeight and player:getMaxWeight() or 0
+    local curW = inv.getCapacityWeight and inv:getCapacityWeight() or 0
+    local maxW = player.getMaxWeight and player:getMaxWeight() or 0
     self._lblPlayerWeight:setName(U.fmtWeight(curW) .. " / " .. U.fmtWeight(maxW) .. " kg")
 
     -- Loot container (se aberto)
     local lootInv = getPlayerLoot(self.playerNum)
     if lootInv then
-        self._listLoot:populateFromInventory(lootInv:getInventory and lootInv:getInventory() or lootInv)
-        local cname = lootInv:getName and lootInv:getName() or "Container"
+        self._listLoot:populateFromInventory(lootInv.getInventory and lootInv:getInventory() or lootInv)
+        local cname = lootInv.getName and lootInv:getName() or "Container"
         self._lblLoot:setName(cname)
-        local lw = lootInv:getCapacityWeight and lootInv:getCapacityWeight() or 0
+        local lw = lootInv.getCapacityWeight and lootInv:getCapacityWeight() or 0
         self._lblLootWeight:setName(U.fmtWeight(lw) .. " kg")
     end
 end
@@ -344,7 +344,7 @@ function EUI_InventoryPage:onTakeAll()
     if not player then return end
     local lootInv = getPlayerLoot(self.playerNum)
     if not lootInv then return end
-    ISTimedActionQueue.add(ISTransferInventory:new(player, lootInv:getInventory and lootInv:getInventory() or lootInv, player:getInventory()))
+    ISTimedActionQueue.add(ISTransferInventory:new(player, lootInv.getInventory and lootInv:getInventory() or lootInv, player:getInventory()))
 end
 
 function EUI_InventoryPage:onTransferAll()
@@ -352,7 +352,7 @@ function EUI_InventoryPage:onTransferAll()
     if not player then return end
     local lootInv = getPlayerLoot(self.playerNum)
     if not lootInv then return end
-    ISTimedActionQueue.add(ISTransferInventory:new(player, player:getInventory(), lootInv:getInventory and lootInv:getInventory() or lootInv))
+    ISTimedActionQueue.add(ISTransferInventory:new(player, player:getInventory(), lootInv.getInventory and lootInv:getInventory() or lootInv))
 end
 
 -- ── Registro no hook do jogo ──────────────────────────────────────────────────

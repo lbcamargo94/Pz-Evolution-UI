@@ -100,7 +100,7 @@ function EUI_BuildingPanel:loadBuildRecipes()
                         catSet[cname] = true
                         table.insert(self._categories, cname)
                     end
-                    local recs = cat:getRecipes and cat:getRecipes()
+                    local recs = cat.getRecipes and cat:getRecipes()
                     if recs then
                         for j = 0, recs:size() - 1 do
                             local rec = recs:get(j)
@@ -320,7 +320,7 @@ function EUI_BuildingPanel:drawDetail(cx, cy, cw, ch)
     local mats   = {}
     if r.rec then
         pcall(function()
-            local ml = r.rec:getMaterials and r.rec:getMaterials()
+            local ml = r.rec.getMaterials and r.rec:getMaterials()
             if ml then
                 for i = 0, ml:size() - 1 do
                     local m = ml:get(i)
@@ -359,8 +359,8 @@ function EUI_BuildingPanel:drawDetail(cx, cy, cw, ch)
     if r.rec then
         local skill, lvl = nil, 0
         pcall(function()
-            skill = r.rec:getRequiredSkill and r.rec:getRequiredSkill()
-            lvl   = r.rec:getRequiredSkillLevel and r.rec:getRequiredSkillLevel() or 0
+            skill = r.rec.getRequiredSkill and r.rec:getRequiredSkill()
+            lvl   = r.rec.getRequiredSkillLevel and r.rec:getRequiredSkillLevel() or 0
         end)
         if skill then
             U.drawDivider(self, cx + T.Pad, y + T.Gap, cw - T.Pad * 2)

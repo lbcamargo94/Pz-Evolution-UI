@@ -59,7 +59,7 @@ function EUI_GeneratorPanel:update()
                 local objs = s:getObjects()
                 for i = 0, objs:size() - 1 do
                     local obj = objs:get(i)
-                    if obj and obj:getType and obj:getType() == IsoObjectType.generator then
+                    if obj and obj.getType and obj:getType() == IsoObjectType.generator then
                         self._generator = obj
                         return
                     end
