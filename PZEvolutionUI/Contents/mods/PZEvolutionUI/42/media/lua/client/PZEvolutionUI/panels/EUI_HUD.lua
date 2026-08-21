@@ -14,9 +14,19 @@ local ROW_H    = 18
 local ICON_W   = 16
 
 -- Helpers seguros — evitam RuntimeException quando Java retorna null (→ nil Lua)
+-- Usa indexação por tabela (obj.method) para checar existência antes de chamar.
 local function safeHealth(p)
-    local bd = p:getBodyDamage(); if not bd then return 1 end
-    return (bd:getOverallBodyHealth() or 100) / 100
+    local bd = p:getBodyDamage()
+    if not bd then return 1 end
+    -- B42 renomeou/reestruturou BodyDamage; checa qual método existe
+    if bd.getOverallBodyHealth then return (bd:getOverallBodyHealth() or 100) / 100 end
+    if bd.getBodyHealth         then return (bd:getBodyHealth()         or 100) / 100 end
+    -- fallback: tenta getHealth() diretamente no player
+    if p.getHealth then
+        local v = p:getHealth()
+        return type(v) == "number" and v or 1
+    end
+    return 1
 end
 local function safeStat(p, method)
     local st = p:getStats(); if not st then return 0 end
