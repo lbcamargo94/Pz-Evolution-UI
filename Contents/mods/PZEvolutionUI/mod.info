@@ -2,6 +2,7 @@ name=PZ Evolution UI
 id=PZEvolutionUI
 description=Complete UI overhaul for Project Zomboid B42. Redesigns every panel — inventory, HUD, character, crafting, vehicles, animals, generators, livestock, cooking, liquids, and more. Standalone, zero dependencies.
 url=https://steamcommunity.com/profiles/76561198/myworkshopfiles/
+author=lbcamargo
 modversion=0.1.0
 pzversion=42
 poster=poster.png

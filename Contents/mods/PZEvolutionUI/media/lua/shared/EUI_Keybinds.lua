@@ -20,6 +20,7 @@ local KEY_DEFS = {
     { id="Chicken",     default=Keyboard.KEY_H   },
     { id="Collect",     default=Keyboard.KEY_O   },
     { id="Bottle",      default=Keyboard.KEY_U   },
+    { id="Livestock",   default=Keyboard.KEY_M   },
     { id="EUI_Settings",default=Keyboard.KEY_F11 },
 }
 
